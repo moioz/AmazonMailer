@@ -1,4 +1,8 @@
-
+'''
+AmazonMailer
+Jacopo Moioli
+2019
+'''
 # required lib(s)
 import requests
 from os import system
@@ -6,7 +10,9 @@ from bs4 import BeautifulSoup
 import time
 import smtplib
 # set the user agent that the program will use to access amazon (input yours instead of 'bla bla bla')
-headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
+headers = {"User-Agent":
+           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
+           'Chrome/75.0.3770.142 Safari/537.36'}
 # smtp credential
 # insert your data
 smtp_server = 'smtp.gmail.com'    # google smtp server
@@ -14,6 +20,7 @@ smtp_port = 587    # google smtp port
 smtp_addrs = ''   # smtp mail
 smtp_passw = ''    # smtp password
 your_email = ''    # reciver mail
+
 
 # welcome things
 def main():
@@ -23,17 +30,18 @@ def main():
     print("Let's go:")
     check_price()
 
+
 def check_price():
     url = input("Input the amazon product url: ")
     try:
         # get the page
-        page = requests.get(url, headers = headers)
+        page = requests.get(url, headers=headers)
         # read the content of the page
         soup1 = BeautifulSoup(page.content, "html.parser")
         soup2 = BeautifulSoup(soup1.prettify(), "html.parser")
         # search the value of title and price in the page
-        title = soup2.find(id = "productTitle").get_text().strip()
-        price = soup2.find(id = "priceblock_ourprice").get_text().strip()
+        title = soup2.find(id="productTitle").get_text().strip()
+        price = soup2.find(id="priceblock_ourprice").get_text().strip()
     except AttributeError:
         print("It seems that this link is not from amazon.")
         system("PAUSE")
@@ -45,7 +53,7 @@ def check_price():
 
     # converting the string into a float
     try:
-        price=float(price[0:-5])
+        price = price[0:-5]
         print("The product '", title, "' costs ", price)
     except ValueError:
         print("Product with wrong price layout!")
@@ -57,11 +65,11 @@ def check_price():
         # set the minimum price
         your_price = input("Type the price that you want: ")
         while True:
-            if price < float(your_price):
+            if float(price) < float(your_price):
                 send_email(title, url)
                 print("EMAIL SENDED")
                 break
-                system("EXIT")
+
             else:
                 print("MONITORING AMAZON...")
                 time.sleep(3600)
@@ -72,25 +80,29 @@ def check_price():
         main()
     return url, title, price
 
+
 def send_email(title, url):
     server = smtplib.SMTP(smtp_server, smtp_port)
 
-    #logging to server
+    # logging to server
     server.ehlo()
     server.starttls()
     server.ehlo()
     server.login(smtp_addrs, smtp_passw)
 
     subject = "The product '{}' that you are tracking has reached your price!".format(title)
-    body = "Hi. \nThis is an automatic mail sended you by AmazonMailer. \nThe product that you war tracking as reached your price. check the link \n{}\nand BUY IT!".format(url)
+    body = "Hi. \nThis is an automatic mail sended you by AmazonMailer. \n" \
+           "The product that you war tracking as reached your price. " \
+           "Check the link \n{}\nand BUY IT!".format(url)
     message = f"Subject: {subject}\n\n{body}"
 
     # sent the email
     server.sendmail(
-        smtp_addrs, # FROM
-        your_email, # TO
-        message # CONTENT
+        smtp_addrs,    # FROM
+        your_email,    # TO
+        message    # CONTENT
     )
     server.quit()
+
 
 main()
