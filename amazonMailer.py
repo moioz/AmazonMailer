@@ -24,6 +24,7 @@ your_email = ''    # reciver mail
 
 # welcome things
 def main():
+
     system("cls")
     print("Welcome to AmazonMailer.py")
     print("This program send you an email if the price of an amazon product is less than you want")
@@ -105,4 +106,14 @@ def send_email(title, url):
     server.quit()
 
 
-main()
+try:
+    main()
+
+except KeyboardInterrupt:
+    print("Quit the program...")
+    print("Thank you for using AmazonMailer")
+
+except ConnectionError:
+    print("Seems that you aren't connected to internet.")
+    print("Check connection and try again")
+    os.system("PAUSE")
