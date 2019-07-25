@@ -3,7 +3,7 @@ Just another Amazon price scraper.
 You can set a price, and if the product is cheaper than it, you recive a mail.
 
 ## Content Table
-- [0. How it works](#How it works)
+- [0. How it works]('#How it works')
 - [1. Usage](#Usage)
 - [2. Credits](#Credits)
 
