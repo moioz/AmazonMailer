@@ -96,6 +96,7 @@ def send_email(title, url):
            "The product that you war tracking as reached your price. " \
            "Check the link \n{}\nand BUY IT!".format(url)
     message = f"Subject: {subject}\n\n{body}"
+    message = message.encode('utf-8')
 
     # sent the email
     server.sendmail(
@@ -104,11 +105,17 @@ def send_email(title, url):
         message    # CONTENT
     )
     server.quit()
-
+    system("pause")
 
 try:
     main()
 
+    restart=input("Press 'q' to quit, or another key to track another product: ")
+    if restart == 'q':
+        print("Thank you for using this program")
+        os.system("pause")
+    else:
+        main()
 except KeyboardInterrupt:
     print("Quit the program...")
     print("Thank you for using AmazonMailer")
